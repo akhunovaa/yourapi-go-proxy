@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,7 +20,7 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 
 		requestedBody := processServer(url)
-		fmt.Fprintf(w, html.EscapeString(requestedBody))
+		fmt.Fprintf(w, requestedBody)
 	})
 	log.Println("Listening on localhost:7733")
 	log.Fatal(http.ListenAndServe(":7733", nil))
