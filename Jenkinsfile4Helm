@@ -25,13 +25,6 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                echo 'Go Build'
-                sh 'go build -o server ./main'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 echo "Building image: $registry:$BUILD_NUMBER"
