@@ -1,17 +1,24 @@
 package main
 
 import (
-	"flag"
-	"github.com/elazarl/goproxy"
+	"fmt"
+	"html"
 	"log"
 	"net/http"
 )
 
 func main() {
-	verbose := flag.Bool("v", true, "should every proxy request be logged to stdout")
-	addr := flag.String("addr", ":7733", "proxy listen address")
-	flag.Parse()
-	proxy := goproxy.NewProxyHttpServer()
-	proxy.Verbose = *verbose
-	log.Fatal(http.ListenAndServe(*addr, proxy))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		keys, ok := r.URL.Query()["url"]
+		key := keys[0]
+
+		if !ok || len(keys[0]) < 1 {
+			log.Println("Url Param 'url' is missing")
+			return
+		}
+		log.Println("Url Param 'key' is: " + string(key))
+		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path+" KEY: "+key))
+	})
+	log.Println("Listening on localhost:7733")
+	log.Fatal(http.ListenAndServe(":7733", nil))
 }
