@@ -25,6 +25,20 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                echo 'Getting some dependencies'
+                sh 'go get -t github.com/elazarl/goproxy'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Go Build'
+                sh 'go build -o server ./main'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 echo "Building image: $registry:$BUILD_NUMBER"
